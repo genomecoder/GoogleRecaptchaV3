@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Gift Card Balance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script>
+        function onSubmit(token) {
+            document.getElementById("gcform").submit();
+        }
+    </script>
+
+    <script src="https://www.google.com/recaptcha/api.js?render=<YourSiteKeyHere>"></script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('Enter Your Site Key Here', { action: 'Home/Index' }).then(function (token) {
+                document.getElementById('captcha').value = token;
+            });
+        });
+    </script>
+</head>
+<body style="background-color: transparent;">
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", @id = "gcform" }))
+    {
+        <div class="form-group" style="max-width: 301px; margin: 20px 0 20px 20px;">
+            <input type="hidden" id="responsetoken" name="responsetoken" value="10" />
+            <input class="form-control" id="tx_card" name="tx_card" type="text" placeholder="Enter card number" />
+            <br />
+
+            <div id="Results" style="float:left; font-size: 16px; color:#973B28;">@Html.Raw(ViewBag.Response)</div>
+            <br />
+            <INPUT type="hidden" id="captcha" name="captcha" value="">
+            <input type="submit" name="btnPost" value="Check Balance" class="btn btn-default" style="float: left;" />
+        </div>
+    }
+    @Html.Raw(ViewBag.hexString)
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/json2.min.js"></script>
+</body>
+</html>
